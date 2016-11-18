@@ -53,10 +53,10 @@ this is the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
 
-fast   general   expensive     /\
- |       |          |         /  \
-slow  focussed    cheap      /____\ 
-                           |no tests|
+    fast   general   expensive     /\
+     |       |          |         /  \
+    slow  focussed    cheap      /____\ 
+                               |no tests|
 
 _You can only have confidence in a layer if you have complete confidence in all the layers below._
 
