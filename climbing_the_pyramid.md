@@ -71,14 +71,14 @@ apply.
 I'm going to introduce the rules now. The rest of this artice, beyond the rules,
 explains and demostrates how and why they work.
 
-1. Always start a implementing a system behaviour by writing a test at the
-   lowest level where it can be described in a single test.
+1. **Always start a implementing a system behaviour by writing a test at the
+   lowest level where it can be described in a single test.**
   
-2. If a test is red, make it green by applying outside-in TDD down into the
-   lower levels.
+2. **If a test is red, make it green by applying outside-in TDD down into the
+   lower levels.**
   
-3. Only if all tests are green and the system behaviour is still not working,
-   climb up to the next level of the and write a new failing test.
+3. **Only if all tests are green and the system behaviour is still not working,
+   climb up to the next level of the and write a new failing test.**
   
 The workflow for applying these rules looks like this:
 
