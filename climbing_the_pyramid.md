@@ -54,9 +54,9 @@ this is the focus of this article.
 It's worth noting some important properties of the test pyramid:
 
     fast   general   expensive     /\
-     |       |          |         /  \
-     |       |          |        /    \
-     |       |          |       /      \
+     |       |          |         /__\
+     |       |          |        /____\
+     |       |          |       /______\
     slow  focussed    cheap    /________\ 
                               |num. tests|
 
