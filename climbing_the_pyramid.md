@@ -119,7 +119,7 @@ Scenario: Pay wages for the number of hours worked in a week
     | 2016-11-14 | 09:00 | 17:00 |
     | 2016-11-15 | 09:00 | 13:00 |
     | 2016-11-17 | 14:00 | 17:00 |
-  When I pay Kevin's wages for the week for the week starting on 2016-11-14
+  When I pay Kevin's wages for the week starting on 2016-11-14
   Then Kevin should get £140 for the week starting on 2016-11-14
 ```
 
@@ -141,7 +141,7 @@ public function setKevinsRate(Money $amount)
 /**
  * Given Kevin has work for the following times this week:
  */
-public function logKevinsWorked(TableNode $entries)
+public function logKevinsWork(TableNode $entries)
 {
     foreach ($entries->getHash() as $entry) {
         $command = new LogWork(
@@ -155,7 +155,7 @@ public function logKevinsWorked(TableNode $entries)
 }
 
 /**
- * @When I calculate Kevin's wages for the week for the week starting on :weekStart
+ * @When I calculate Kevin's wages for the week starting on :weekStart
  */
 public function calculateKevinsWages(Date $weekStart)
 {
@@ -203,7 +203,7 @@ public function setKevinsRate(Money $amount)
 /**
  * Given Kevin has work for the following times this week:
  */
-public function logKevinsWorked(TableNode $entries)
+public function logKevinsWork(TableNode $entries)
 {
     $this->visit('/');
     $this->clickLink('Set Employee Rate');
@@ -219,7 +219,7 @@ public function logKevinsWorked(TableNode $entries)
 }
 
 /**
- * @When I calculate Kevin's wages for the week for the week starting on :weekStart
+ * @When I calculate Kevin's wages for the week starting on :weekStart
  */
 public function calculateKevinsWages(Date $weekStart)
 {
@@ -256,7 +256,7 @@ Scenario: Pay time and a half for overtime hours
   And Kevin has work for the following times this week:
     | Day        | Start | End   |
     | 2016-11-21 | 15:00 | 19:00 |
-  When I pay Kevin's wages for the week for the week starting on 2016-11-21
+  When I pay Kevin's wages for the week starting on 2016-11-21
   Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
