@@ -80,7 +80,7 @@ explains and demostrates how and why they work.
   
 The workflow for applying these rules looks like this:
 
-**[WORKFLOW DIAGRAM]**
+![Workflow diagram](pyramid.jpg)
 
 In my experience, these rules, use with a supporting architure (like the one
 described in
