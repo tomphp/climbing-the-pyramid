@@ -28,7 +28,7 @@ have now learned a workflow which gives complete complete confidence in the test
 suite, and fast build pipelines. This article presents the simple rules of this
 workflow.
 
-[Jump straight to the rules](#rules)
+[Jump straight to the rules](#the-rules)
   
 ## Introducing the Test Pyramid
 
@@ -64,7 +64,7 @@ The actual names of the layers and the number of layers may vary depending on
 your achitecture, but these properties and the rules I'm about to present still
 apply.
 
-## The Rules #rules
+## The Rules
 
 I'm going to introduce the rules now. The rest of this artice, beyond the rules,
 explains and demostrates how and why they work.
