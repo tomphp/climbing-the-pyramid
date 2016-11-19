@@ -107,20 +107,20 @@ the Service layer.
 
 ### The First Behaviour
 
-The first thing we need the system to do is to calculate the wagers from the
+The first thing we need the system to do is to calculate the wages from the
 number of hours worked. Let's create a single scenario which describes this
 behaviour:
 
 ```gherkin
 Scenario: Pay wages for the number of hours worked in a week
   Given Kevin gets paid £10 per hour
-  And Kevin has work for the following times this week:
+  And Kevin has worked for the following times this week:
     | Day        | Start | End   |
     | 2016-11-14 | 09:00 | 17:00 |
     | 2016-11-15 | 09:00 | 13:00 |
     | 2016-11-17 | 14:00 | 17:00 |
   When I pay Kevin's wages for the week starting on 2016-11-14
-  Then Kevin should get £140 for the week starting on 2016-11-14
+  Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
 This is too complicated to create a single unit test for, but it could be
@@ -139,7 +139,7 @@ public function setKevinsRate(Money $amount)
 }
 
 /**
- * Given Kevin has work for the following times this week:
+ * Given Kevin has worked for the following times this week:
  */
 public function logKevinsWork(TableNode $entries)
 {
@@ -166,7 +166,7 @@ public function calculateKevinsWages(Date $weekStart)
 /**
  * @Then Kevin should get £:amount for the week starting on :weekStart
  */
-public function checkKevinsWagersForAWeek(Money $amount, Date $weekStart)
+public function checkKevinsWagesForAWeek(Money $amount, Date $weekStart)
 {
     $query = CheckEmployeeWagersForAWeek($weekStart);
     $result = $this->queryRunner($query);
@@ -224,16 +224,16 @@ public function logKevinsWork(TableNode $entries)
 public function calculateKevinsWages(Date $weekStart)
 {
     $this->visit('/');
-    $this->clickLink('Calcuate Wages for Week');
+    $this->clickLink('Calculate Wages for Week');
     $this->clickLink('Kevin');
     $this->fillField('week', $weekStart->getValue());
-    $this->pressButton('Cacluate');
+    $this->pressButton('Calculate');
 }
 
 /**
  * @Then Kevin should get £:amount for the week starting on :weekStart
  */
-public function checkKevinsWagersForAWeek(Money $amount, Date $weekStart)
+public function checkKevinsWagesForAWeek(Money $amount, Date $weekStart)
 {
     $this->assertPageHasText("Wages for week starting $weekStart: $amount");
 }
@@ -253,7 +253,7 @@ Let's create a scenario for that.
 Scenario: Pay time and a half for overtime hours
   Given Kevin gets paid £10 per hour
   And normal working hours are between 09:00 and 17:00
-  And Kevin has work for the following times this week:
+  And Kevin has worked for the following times this week:
     | Day        | Start | End   |
     | 2016-11-21 | 15:00 | 19:00 |
   When I pay Kevin's wages for the week starting on 2016-11-21
@@ -292,10 +292,10 @@ delivery.
 This article doesn't cover everything which is needed to achieve this - the
 identification of the different layers, classification of the tests, 
 correct architecture and mocking approaches are all things which I've not gone
-into any depth with here as I believe they have been covered in depth elsewhere.
+into in any depth here as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
 like to hear if they match your workflow or if you can think of situations
-where they don't apply. If you have any further thoughts or question please
+where they don't apply. If you have any further thoughts or questions please
 contact me either by [email](mailto:tom@x2k.co.uk) or on
 [Twitter](https://twitter.com/tomphp).
