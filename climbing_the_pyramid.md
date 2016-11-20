@@ -2,7 +2,7 @@
 
 In this modern day of software development, we've learned that to deliver
 high-quality software we must work in an Agile way. To do this, we need quick
-feedback back so that we can adjust and learn as fast as possible. We
+feedback so that we can adjust and learn as fast as possible. We
 technically optimise the feedback cycle time at the smallest level by using
 TDD, and at the largest level with Continuous Deployment.
 
@@ -53,11 +53,11 @@ the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
 
-    fast   general   expensive     /\
+    slow   general   expensive     /\
      |       |          |         /__\
      |       |          |        /____\
      |       |          |       /______\
-    slow  focussed    cheap    /________\ 
+    fast  focussed    cheap    /________\ 
                               |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
@@ -159,7 +159,7 @@ public function logKevinsWork(TableNode $entries)
  */
 public function calculateKevinsWages(Date $weekStart)
 {
-    $command = PayWeeklyWagers($this->kevin, $weekStart);
+    $command = PayWeeklyWages($this->kevin, $weekStart);
     $this->commandBus->run($command);
 }
 
@@ -168,7 +168,7 @@ public function calculateKevinsWages(Date $weekStart)
  */
 public function checkKevinsWagesForAWeek(Money $amount, Date $weekStart)
 {
-    $query = CheckEmployeeWagersForAWeek($weekStart);
+    $query = CheckEmployeeWagesForAWeek($weekStart);
     $result = $this->queryRunner($query);
 
     assertEquals($amount, $result->getAmount());
@@ -185,7 +185,7 @@ Therefore, we can drive the creation of the user interface by climbing up the
 pyramid one level to create a UI test.
 
 A neat way to do this is to re-use the same Gherkin scenario, but with new
-steps. These new steps might looks like this:
+context steps. These new steps might looks like this:
 
 ```php
 /**
@@ -270,7 +270,7 @@ new step definition:
  */
 public function setWorkingHours(Time $start, Time $end)
 {
-    $command = new SetWorkingHourse($start, $end);
+    $command = new SetWorkingHours($start, $end);
     $this->commandBus->run($command);
 }
 ```
