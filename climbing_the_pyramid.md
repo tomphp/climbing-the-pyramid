@@ -1,7 +1,7 @@
 # Climbing the Test Pyramid
 
 In this modern day of software development, we've learned that to deliver
-high-quality software. we must work in an Agile way. To do this, we need quick
+high-quality software, we must work in an Agile way. To do this, we need quick
 feedback so that we can adjust and learn as fast as possible. We
 technically optimise the feedback cycle time at the smallest level by using
 TDD, and at the largest level with Continuous Deployment.
