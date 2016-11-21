@@ -1,7 +1,7 @@
 # Climbing the Test Pyramid
 
 In this modern day of software development, we've learned that to deliver
-high-quality software we must work in an Agile way. To do this, we need quick
+high-quality software. we must work in an Agile way. To do this, we need quick
 feedback so that we can adjust and learn as fast as possible. We
 technically optimise the feedback cycle time at the smallest level by using
 TDD, and at the largest level with Continuous Deployment.
@@ -13,15 +13,14 @@ With this knowledge, the problem which many people are struggling with at the
 moment is slow test suites - which in turn, makes the build pipelines slow,
 painful and expensive.
 
-Thankfully there are a some very clever people who are currently sharing
-the information (at conferences and in books and articles) about building
+Thankfully there are a some very clever people who are currently sharing information (at conferences and in books and articles) about building
 architectures which allow this problem to be solved. This is done by favouring
 isolated, targeted tests at lowest levels; over slow, all encompassing
 end-to-end tests.
 
-The concern that this raises in a lot of people, is how to you maintain the
+In a lot of people, this raises the concern how to maintain the
 confidence that these lower level tests cover all the behaviour in the system,
-when you are not testing everything completely with end-to-end acceptance tests?
+although not testing completely everything with end-to-end acceptance tests.
 
 For some years now, I've been developing software in this way, and I feel that
 I have now learned a workflow which gives me complete confidence in the test
@@ -82,7 +81,7 @@ how and why they work.
    lower levels.**
   
 3. **Only if all tests are green and the system behaviour is still not working,
-   climb up to the next level of the and write a new failing test.**
+   climb up to the next level of the pyramid and write a new failing test.**
   
 The workflow for applying these rules looks like this:
 
@@ -92,14 +91,14 @@ In my experience, these rules, used with a supporting architecture (like the
 one described in [this
 talk](https://skillsmatter.com/skillscasts/8567-testable-software-architecture)),
 have always lead me to a fast and stable test suite which gives me the
-confidence I need in the application.
+confidence I need to run and change my application.
 
 ## The Example
 
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
 
-For this application: the UI layer will be a HTML webpage, the Service layer
+For this application, the UI layer will be a HTML webpage, the Service layer
 will be a set of classes which represent the actions which can be performed
 on the system, and the Unit layer is made up of all the classes which make up
 the domain model. All communication between the UI and Unit layers will go via
@@ -246,11 +245,11 @@ and confirm that the implementation is complete.
 
 ### Second Behaviour
 
-For the second behaviour, the system needs to pay time and a half for overtime.
+For the second behaviour, the system needs to pay number of hours times one and a half for overtime.
 Let's create a scenario for that.
 
 ```gherkin
-Scenario: Pay time and a half for overtime hours
+Scenario: Pay number of hours times one and a half for overtime
   Given Kevin gets paid £10 per hour
   And normal working hours are between 09:00 and 17:00
   And Kevin has worked for the following times this week:
