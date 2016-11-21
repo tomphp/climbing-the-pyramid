@@ -98,11 +98,11 @@ confidence I need to run and change my application.
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
 
-For this application, the E2E layer will be a HTML webpage, the Service layer
-will be a set of classes which represent the actions which can be performed
-on the system, and the Unit layer is made up of all the classes which make up
-the domain model. All communication between the E2E and Unit layers will go via
-the Service layer.
+For this application, the UI will be a HTML webpage and will only be tested by
+the E2E tests, the Service layer will be a set of classes which represent the
+actions which can be performed on the system, and the Unit layer is made up of
+all the classes which make up the domain model. All communication between the
+UI and Unit layers will go via the Service layer.
 
 ### The First Behaviour
 
@@ -275,7 +275,7 @@ public function setWorkingHours(Time $start, Time $end)
 ```
 
 Next we can apply **rule two** to push down the pyramid layers to implement
-this using TDD. No changes to the E2E are required to do this.
+this using TDD. No changes to the UI are required to do this.
 
 Once the scenario goes green, we can apply **rule three** by going to the user
 interface and checking if this behaviour works. If everything has gone well
