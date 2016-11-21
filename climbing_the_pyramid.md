@@ -35,7 +35,7 @@ The Test Pyramid was created quite some time ago by Mike Cohn. It looks like
 this:
       
          /\
-        /UI\
+        /E2E      <- end-to-end
        /----\
       /Service
      /--------\
@@ -98,10 +98,10 @@ confidence I need to run and change my application.
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
 
-For this application, the UI layer will be a HTML webpage, the Service layer
+For this application, the E2E layer will be a HTML webpage, the Service layer
 will be a set of classes which represent the actions which can be performed
 on the system, and the Unit layer is made up of all the classes which make up
-the domain model. All communication between the UI and Unit layers will go via
+the domain model. All communication between the E2E and Unit layers will go via
 the Service layer.
 
 ### The First Behaviour
@@ -123,7 +123,7 @@ Scenario: Pay wages for the number of hours worked in a week
 ```
 
 This is too complicated to create a single unit test for, but it could be
-applied at both the UI and the Service levels. By applying the **first rule**,
+applied at both the E2E and the Service levels. By applying the **first rule**,
 we choose the lowest level of the two and write some steps to test the Service
 layer. These look like this:
 
@@ -181,7 +181,7 @@ drive the development of domain model.
 Once all the tests are green, we can consider **rule three**. Since there is no
 user interface at this point, we can consider system behaviour is incomplete.
 Therefore, we can drive the creation of the user interface by climbing up the
-pyramid one level to create a UI test.
+pyramid one level to create a E2E test.
 
 A neat way to do this is to re-use the same Gherkin scenario, but with new
 context steps. These new steps might looks like this:
@@ -275,7 +275,7 @@ public function setWorkingHours(Time $start, Time $end)
 ```
 
 Next we can apply **rule two** to push down the pyramid layers to implement
-this using TDD. No changes to the UI are required to do this.
+this using TDD. No changes to the E2E are required to do this.
 
 Once the scenario goes green, we can apply **rule three** by going to the user
 interface and checking if this behaviour works. If everything has gone well
