@@ -28,19 +28,19 @@ suite as well as fast build pipelines. This article presents the three simple
 rules of this workflow.
 
 [Jump straight to the rules](#the-rules)
-  
+
 ## Introducing the Test Pyramid
 
 The Test Pyramid was created quite some time ago by Mike Cohn. It looks like
 this:
-      
+
          /\
         /E2E      <- end-to-end
        /----\
       /Service
      /--------\
     /___Unit___\
- 
+
 Each layer describes a level of testing in the project. The bottom level
 contains the smallest, most targeted tests, which are the fastest to run. The
 top level contains the tests which prove the system behaviour by testing the
@@ -56,7 +56,7 @@ It's worth noting some important properties of the test pyramid:
      |       |          |         /__\
      |       |          |        /____\
      |       |          |       /______\
-    fast  focussed    cheap    /________\ 
+    fast  focussed    cheap    /________\
                               |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
@@ -76,13 +76,13 @@ how and why they work.
 
 1. **Always start implementing a new system behaviour by writing a test at the
    lowest level where it can be described in a single test.**
-  
+
 2. **If a test is red, make it green by applying outside-in TDD down into the
    lower levels.**
-  
+
 3. **Only if all tests are green and the system behaviour is still not working,
    climb up to the next level of the pyramid and write a new failing test.**
-  
+
 The workflow for applying these rules looks like this:
 
 ![Workflow diagram](pyramid.jpg)
@@ -122,8 +122,8 @@ Scenario: Pay wages for the number of hours worked in a week
   Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
-This is too complicated to create a single unit test for, but it could be
-applied at both the E2E and the Service levels. By applying the **first rule**,
+This is too complicated to implement using a single unit test, but it can be
+done at both the E2E or the Service level. By applying the **first rule**,
 we choose the lowest level of the two and write some steps to test the Service
 layer. These look like this:
 
@@ -184,7 +184,7 @@ Therefore, we can drive the creation of the user interface by climbing up the
 pyramid one level to create a E2E test.
 
 A neat way to do this is to re-use the same Gherkin scenario, but with new
-context steps. These new steps might looks like this:
+context steps. The new steps might look like this:
 
 ```php
 /**
@@ -245,8 +245,8 @@ and confirm that the implementation is complete.
 
 ### Second Behaviour
 
-For the second behaviour, the system needs to pay number of hours times one and a half for overtime.
-Let's create a scenario for that.
+For the second behaviour, the system needs to pay the number of hours times one and a half for overtime.
+Let's create a new scenario for that.
 
 ```gherkin
 Scenario: Pay number of hours times one and a half for overtime
@@ -259,8 +259,8 @@ Scenario: Pay number of hours times one and a half for overtime
   Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
-Again, we start by applying **rule one** - the lowest level that this scenario
-could be applied is at the Service level. To do this we only need to add one
+Again, we start by applying **rule one** - the lowest level at which this scenario
+can be implemented is the Service level. To do this we only need to add one
 new step definition:
 
 ```
@@ -284,14 +284,13 @@ climb the pyramid and write another test**.
 
 ## Conclusion
 
-From my current experience, these rules are a great guide to creating a test
+From my current experience, these rules are a great guide to create a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
 delivery.
 
-This article doesn't cover everything which is needed to achieve this - the
-identification of the different layers, classification of the tests, 
-correct architecture and mocking approaches are all things which I've not gone
-into in any depth here as I believe they have been covered in depth elsewhere.
+This article didn't cover everything which is necessary to achieve this - the
+identification of the different layers, classification of the tests,
+correct architecture and mocking approaches are all the things I didn't discuss in detail here as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
 like to hear if they match your workflow or if you can think of situations
