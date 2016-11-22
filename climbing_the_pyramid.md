@@ -294,7 +294,7 @@ An example feature for the application we've just created would look like this:
 Feature: Paying wages
   In order to pay our employees for the great work they do
   As a book keeper
-  I need to be able to calcualte their wages
+  I need to be able to calcualate their wages
 
   Background:
     Given Kevin gets paid £10 per hour
@@ -324,8 +324,8 @@ From my current experience, these rules are a great guide to creating a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
 delivery. It doesn't matter what the layers of your test suite are, so long as
 the lower ones support the ones above. For example, if your application has a
-Javascript *Single Page Application* for the UI, which talks a REST API, then
-the pyramid might look like this:
+Javascript *Single Page Application* for the UI, which talks to a REST API,
+then the pyramid might look like this:
 
                 /\
             End-to-End
@@ -340,9 +340,9 @@ the pyramid might look like this:
       /    UI & Domain   \
      /_____Unit Tests_____\
 
-This article didn't cover everything which is necessary to achieve this - the
+This article doesn't cover everything which is necessary to achieve this - the
 identification of the different layers, classification of the tests, correct
-architecture and mocking approaches are all the things I didn't discuss in
+architecture and mocking approaches are all the things I haven't discuss in
 detail here as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
