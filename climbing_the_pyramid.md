@@ -53,12 +53,12 @@ the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
 
-    slow   general   expensive     /\
-     |       |          |         /__\
-     |       |          |        /____\
-     |       |          |       /______\
-    fast  focussed    cheap    /________\
-                              |num. tests|
+    slow   general  business facing   expensive     /\
+     |       |             |             |         /__\
+     |       |             |             |        /____\
+     |       |             |             |       /______\
+    fast  focused  technology facing   cheap    /________\
+                                               |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
 the layers below.**_
