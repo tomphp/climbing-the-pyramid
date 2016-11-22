@@ -278,8 +278,8 @@ At this point, all the business rules are tested and documented by the tests
 in the **Acceptance** layer. This is the closest level to the logic where they can 
 be described in business terms.
 
-Since the test layers above the service layer are mostly made up subsets of the
-layers below, it's nice to describe them in the same way. A neat way to do
+Since the test layers above the acceptance layer are mostly made up subsets of
+the layers below, it's nice to describe them in the same way. A neat way to do
 this, which is slowly becoming more popular in the BDD community, is to use the
 same Gherkin features at each level but have them test the application through
 different entry points. This can either be done by running them against a
