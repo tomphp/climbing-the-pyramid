@@ -19,7 +19,7 @@ architectures which allow this problem to be solved. This is done by favouring
 isolated, targeted tests at lowest levels; over slow, all encompassing
 end-to-end tests.
 
-In a lot of people, this raises the concern how to maintain the
+For a lot of people, this raises the concern about how to maintain the
 confidence that these lower level tests cover all the behaviour in the system,
 although not testing completely everything with end-to-end acceptance tests.
 
