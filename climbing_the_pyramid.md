@@ -110,19 +110,18 @@ For this application:
 ### The First Behaviour
 
 The first thing we need the system to do is to calculate the wages from the
-number of hours worked. Let's create an example which describes this behaviour:
+number of hours worked. Let's define an example which describes this behaviour:
 
-```gherkin
-Scenario: Pay wages for the number of hours worked in a week
-  Given Kevin gets paid £10 per hour
-  And normal working hours are between 09:00 and 17:00
-  And Kevin has worked for the following times:
-    | Day        | Start | End   |
-    | 2016-11-14 | 09:00 | 17:00 |
-    | 2016-11-15 | 09:00 | 13:00 |
-    | 2016-11-17 | 14:00 | 17:00 |
-  When I pay Kevin's wages for the week starting on 2016-11-14
-  Then Kevin should get £150 for the week starting on 2016-11-14
+```
+Given Kevin gets paid £10 per hour
+And normal working hours are between 09:00 and 17:00
+And Kevin has worked for the following times:
+  | Day        | Start | End   |
+  | 2016-11-14 | 09:00 | 17:00 |
+  | 2016-11-15 | 09:00 | 13:00 |
+  | 2016-11-17 | 14:00 | 17:00 |
+When I pay Kevin's wages for the week starting on 2016-11-14
+Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
 This is too complicated to create a single unit test for, but it can be
@@ -226,17 +225,16 @@ and confirm that the implementation is complete.
 ### Second Behaviour
 
 For the second behaviour, the system needs to pay the number of hours times one
-and a half for overtime. Let's create a new scenario for that:
+and a half for overtime. Let's define an example for that:
 
-```gherkin
-Scenario: Pay number of hours times one and a half for overtime
-  Given Kevin gets paid £10 per hour
-  And normal working hours are between 09:00 and 17:00
-  And Kevin has worked for the following times:
-    | Day        | Start | End   |
-    | 2016-11-21 | 15:00 | 19:00 |
-  When I pay Kevin's wages for the week starting on 2016-11-21
-  Then Kevin should get £50 for the week starting on 2016-11-21
+```
+Given Kevin gets paid £10 per hour
+And normal working hours are between 09:00 and 17:00
+And Kevin has worked for the following times:
+  | Day        | Start | End   |
+  | 2016-11-21 | 15:00 | 19:00 |
+When I pay Kevin's wages for the week starting on 2016-11-21
+Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
 Again, we start by applying **rule one** - the lowest level at which this
