@@ -21,7 +21,7 @@ end-to-end tests.
 
 For a lot of people, this raises the concern about how to maintain the
 confidence that these lower level tests cover all the behaviour in the system,
-although not testing completely everything with end-to-end acceptance tests.
+while not testing everything with end-to-end acceptance tests.
 
 For some years now, I've been developing software in this way, and I feel that
 I have now learned a workflow which gives me complete confidence in the test
