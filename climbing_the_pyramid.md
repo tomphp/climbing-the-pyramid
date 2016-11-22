@@ -81,8 +81,9 @@ how and why they work.
 2. **If a test is red, make it green by applying outside-in TDD down into the
    lower levels.**
 
-3. **Only if all tests are green and the system behaviour is still not working,
-   climb up to the next level of the pyramid and write a new failing test.**
+3. **If and only if all tests are green AND the system behaviour is still not
+   working, climb up to the next level of the pyramid and write a new failing
+   test.**
 
 The workflow for applying these rules looks like this:
 
