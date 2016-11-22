@@ -165,7 +165,7 @@ user interface at this point, we can consider system behaviour is incomplete.
 Therefore, we can drive the creation of the user interface by **climbing up the
 pyramid one level** to create an E2E test.
 
-This E2E looks like this:
+This E2E test looks like this:
 
 ```php
 public function test_paying_wages_for_a_week_via_the_UI()
