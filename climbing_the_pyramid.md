@@ -92,7 +92,7 @@ The workflow for applying these rules looks like this:
 In my experience, these rules, used with a supporting architecture (like the
 one described in [this
 talk](https://skillsmatter.com/skillscasts/8567-testable-software-architecture)),
-have always lead me to a fast and stable test suite which gives me the
+have always led me to a fast and stable test suite which gives me the
 confidence I need to run and change my application.
 
 ## The Example
