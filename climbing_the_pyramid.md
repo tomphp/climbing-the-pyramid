@@ -58,7 +58,7 @@ It's worth noting some important properties of the test pyramid:
      |       |        |        /____\
      |       |        |       /______\
     fast  focused   cheap    /________\
-                                               |num. tests|
+                            |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
 the layers below.**_
@@ -328,18 +328,18 @@ the lower ones support the ones above. For example, if your application has a
 Javascript *Single Page Application* for the UI, which talks a REST API, then
 the pyramid might look like this:
 
-              /\
-          End-to-End
-            /Tests
-           /-----\
-          /API Tests
-         /over HTTP\
-        /-----------\
-       / UI & Domain \
-      /Acceptance Tests
-     /----------------\
-    /    UI & Domain   \
-   /_____Unit Tests_____\
+                /\
+            End-to-End
+              /Tests
+             /-----\
+            /API Tests
+           /over HTTP\
+          /-----------\
+         / UI & Domain \
+        /Acceptance Tests
+       /----------------\
+      /    UI & Domain   \
+     /_____Unit Tests_____\
 
 This article didn't cover everything which is necessary to achieve this - the
 identification of the different layers, classification of the tests, correct
