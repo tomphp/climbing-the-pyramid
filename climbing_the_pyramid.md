@@ -38,7 +38,7 @@ this:
          /\
         /E2E      <- end-to-end
        /----\
-      /Service
+      /Acceptance
      /--------\
     /___Unit___\
 
@@ -53,11 +53,11 @@ the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
 
-    slow   general  business facing   expensive     /\
-     |       |             |             |         /__\
-     |       |             |             |        /____\
-     |       |             |             |       /______\
-    fast  focused  technology facing   cheap    /________\
+    slow   general expensive     /\
+     |       |        |         /__\
+     |       |        |        /____\
+     |       |        |       /______\
+    fast  focused   cheap    /________\
                                                |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
@@ -99,22 +99,24 @@ confidence I need to run and change my application.
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
 
-For this application, the UI will be a HTML webpage and will only be tested by
-the E2E tests, the Service layer will be a set of classes which represent the
-actions which can be performed on the system, and the Unit layer is made up of
-all the classes which make up the domain model. All communication between the
-UI and Unit layers will go via the Service layer.
+For this application:
+
+* the UI will be a HTML webpage and will only be tested by the **E2E** tests.
+* The business logic will all be contained in the *domain model*. This logic
+  will be clearly defined by the tests in the **Acceptance** layer.
+* The **Unit** layer will contain all the unit tests which are used to drive
+  the implementation of the *domain model*.
 
 ### The First Behaviour
 
 The first thing we need the system to do is to calculate the wages from the
-number of hours worked. Let's create a single scenario which describes this
-behaviour:
+number of hours worked. Let's create an example which describes this behaviour:
 
 ```gherkin
 Scenario: Pay wages for the number of hours worked in a week
   Given Kevin gets paid £10 per hour
-  And Kevin has worked for the following times this week:
+  And normal working hours are between 09:00 and 17:00
+  And Kevin has worked for the following times:
     | Day        | Start | End   |
     | 2016-11-14 | 09:00 | 17:00 |
     | 2016-11-15 | 09:00 | 13:00 |
@@ -123,55 +125,34 @@ Scenario: Pay wages for the number of hours worked in a week
   Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
-This is too complicated to create a single unit test, but it can be
-done at both the E2E or the Service level. By applying the **first rule**,
-we choose the lowest level of the two and write some steps to test the Service
-layer. These look like this:
+This is too complicated to create a single unit test for, but it can be
+described in a single test at both the **E2E** or the **Acceptance** level. By
+applying the **first rule**, we choose the lowest level of the two create a
+test which looks like this:
 
 ```php
-/**
- * @Given Kevin gets paid £:amount per hour
- */
-public function setKevinsRate(Money $amount)
-{
-    $command = new EmployeeDayRate($this->kevin, $amount);
-    $this->commandBus->run($command);
-}
+public function test_paying_wages_for_a_week()
+    // Given Kevin gets paid £10 per hour
+    $this->commandBus->run(new EmployeeDayRate($this->kevin, Money::fromPounds(10));
 
-/**
- * Given Kevin has worked for the following times this week:
- */
-public function logKevinsWork(TableNode $entries)
-{
-    foreach ($entries->getHash() as $entry) {
-        $command = new LogWork(
-          $this->kevin,
-          Date::fromString($entry['Day']),
-          Time::fromString($entry['Start']),
-          Time::fromString($entry['End'])
-        );
-        $this->commandBus->run($command);
-    }
-}
+    // And normal working hours are between 09:00 and 17:00
+    $this->commandBus->run(new SetWorkingHours(Period::fromStrings('09:00', '17:00')));
 
-/**
- * @When I calculate Kevin's wages for the week starting on :weekStart
- */
-public function calculateKevinsWages(Date $weekStart)
-{
-    $command = PayWeeklyWages($this->kevin, $weekStart);
-    $this->commandBus->run($command);
-}
+    // And Kevin has worked for the following times:
+    //   | Day        | Start | End   |
+    //   | 2016-11-14 | 09:00 | 17:00 |
+    //   | 2016-11-15 | 09:00 | 13:00 |
+    //   | 2016-11-17 | 14:00 | 17:00 |
+    $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-14'), Period::fromString('09:00', '17:00')));
+    $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-15'), Period::fromString('09:00', '13:00')));
+    $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-17'), Period::fromString('14:00', '17:00')));
+   
+    // When I calculate Kevin's wages for the week starting on 2016-11-14
+    $this->commandBus->run(PayWeeklyWages($this->kevin, '2016-11-14');
 
-/**
- * @Then Kevin should get £:amount for the week starting on :weekStart
- */
-public function checkKevinsWagesForAWeek(Money $amount, Date $weekStart)
-{
-    $query = CheckEmployeeWagesForAWeek($weekStart);
-    $result = $this->queryRunner($query);
-
-    assertEquals($amount, $result->getAmount());
+    // Then Kevin should get £150 for the week starting on '2016-11-14'
+    $result = $this->queryRunner(CheckEmployeeWagesForAWeek('2016-11-14'));
+    assertEquals(150, $result->getAmount());
 }
 ```
 
@@ -181,61 +162,59 @@ drive the development of domain model.
 
 Once all the tests are green, we can consider **rule three**. Since there is no
 user interface at this point, we can consider system behaviour is incomplete.
-Therefore, we can drive the creation of the user interface by climbing up the
-pyramid one level to create a E2E test.
+Therefore, we can drive the creation of the user interface by **climbing up the
+pyramid one level** to create an E2E test.
 
-A neat way to do this is to re-use the same Gherkin scenario, but with new
-context steps. The new steps might look like this:
+This E2E looks like this:
 
 ```php
-/**
- * @Given Kevin gets paid £:amount per hour
- */
-public function setKevinsRate(Money $amount)
-{
+public function test_paying_wages_for_a_week_via_the_UI()
+    // Given Kevin gets paid £10 per hour
     $this->visit('/');
     $this->clickLink('Set Employee Rate');
     $this->clickLink('Kevin');
-    $this->fillField('rate', $amount->getValue());
+    $this->fillField('Rate', 10);
     $this->pressButton('Update');
-}
 
-/**
- * Given Kevin has work for the following times this week:
- */
-public function logKevinsWork(TableNode $entries)
-{
+    // And normal working hours are between 09:00 and 17:00
+    $this->visit('/');
+    $this->clickLink('Settings');
+    $this->fillField('Start Time', '09:00');
+    $this->fillField('End Time', '17:00');
+    $this->pressButton('Update');
+
+    // And Kevin has worked for the following times:
+    //   | Day        | Start | End   |
+    //   | 2016-11-14 | 09:00 | 17:00 |
+    //   | 2016-11-15 | 09:00 | 13:00 |
+    //   | 2016-11-17 | 14:00 | 17:00 |
     $this->visit('/');
     $this->clickLink('Set Employee Rate');
     $this->clickLink('Kevin');
 
-    foreach ($entries->getHash() as $entry) {
-        $this->fillField('day', $entry['Day']);
-        $this->fillField('start', $entry['Start']);
-        $this->fillField('end', $entry['End']);
+    $this->fillField('Day', '2016-11-14');
+    $this->fillField('Start', '09:00');
+    $this->fillField('End', '17:00');
+    $this->pressButton('Log Work');
 
-        $this->pressButton('Log Work');
-    }
-}
+    $this->fillField('Day', '2016-11-15');
+    $this->fillField('Start', '09:00');
+    $this->fillField('End', '13:00');
+    $this->pressButton('Log Work');
 
-/**
- * @When I calculate Kevin's wages for the week starting on :weekStart
- */
-public function calculateKevinsWages(Date $weekStart)
-{
+    $this->fillField('Day', '2016-11-17');
+    $this->fillField('Start', '14:00');
+    $this->fillField('End', '17:00');
+    $this->pressButton('Log Work');
+   
+    // Then Kevin should get £150 for the week starting on '2016-11-14'
     $this->visit('/');
     $this->clickLink('Calculate Wages for Week');
     $this->clickLink('Kevin');
-    $this->fillField('week', $weekStart->getValue());
+    $this->fillField('week', '2016-11-14');
     $this->pressButton('Calculate');
-}
 
-/**
- * @Then Kevin should get £:amount for the week starting on :weekStart
- */
-public function checkKevinsWagesForAWeek(Money $amount, Date $weekStart)
-{
-    $this->assertPageHasText("Wages for week starting $weekStart: $amount");
+    $this->assertPageHasText("Wages for week starting 2016-11-14: £150");
 }
 ```
 
@@ -246,48 +225,121 @@ and confirm that the implementation is complete.
 
 ### Second Behaviour
 
-For the second behaviour, the system needs to pay the number of hours times one and a half for overtime.
-Let's create a new scenario for that.
+For the second behaviour, the system needs to pay the number of hours times one
+and a half for overtime. Let's create a new scenario for that:
 
 ```gherkin
 Scenario: Pay number of hours times one and a half for overtime
   Given Kevin gets paid £10 per hour
   And normal working hours are between 09:00 and 17:00
-  And Kevin has worked for the following times this week:
+  And Kevin has worked for the following times:
     | Day        | Start | End   |
     | 2016-11-21 | 15:00 | 19:00 |
   When I pay Kevin's wages for the week starting on 2016-11-21
   Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
-Again, we start by applying **rule one** - the lowest level at which this scenario
-can be implemented is the Service level. To do this we only need to add one
-new step definition:
+Again, we start by applying **rule one** - the lowest level at which this
+scenario can be implemented is the **Acceptance** level, so we create a test
+there:
 
-```
-/**
- * @Given normal working hours are between :start and :end
- */
-public function setWorkingHours(Time $start, Time $end)
-{
-    $command = new SetWorkingHours($start, $end);
-    $this->commandBus->run($command);
+```php
+public function test_paying_overtime_wages_for_a_week()
+    // Given Kevin gets paid £10 per hour
+    $this->commandBus->run(new EmployeeDayRate($this->kevin, Money::fromPounds(10));
+
+    // And normal working hours are between 09:00 and 17:00
+    $this->commandBus->run(new SetWorkingHours(Period::fromStrings('09:00', '17:00')));
+
+    // And Kevin has worked for the following times:
+    //   | Day        | Start | End   |
+    //   | 2016-11-21 | 15:00 | 19:00 |
+    $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-21'), Period::fromString('15:00', '19:00')));
+   
+    // When I calculate Kevin's wages for the week starting on 2016-11-21
+    $this->commandBus->run(PayWeeklyWages($this->kevin, '2016-11-21');
+
+    // Then Kevin should get £50 for the week starting on '2016-11-21'
+    $result = $this->queryRunner(CheckEmployeeWagesForAWeek('2016-11-21'));
+    assertEquals(50, $result->getAmount());
 }
 ```
 
-Next we can apply **rule two** to push down the pyramid layers to implement
-this using TDD. No changes to the UI are required to do this.
+Next, this test is currently red, so we can apply **rule two** and push down
+the pyramid layers to implement this using TDD. No changes to the UI are
+required to do this.
 
-Once the scenario goes green, we can apply **rule three** by going to the user
-interface and checking if this behaviour works. If everything has gone well
+Once the test goes green, we can apply **rule three** by going to the user
+interface and checking if this behaviour works. If everything has gone well,
 then this behaviour should be working correctly and there is **no need to
 climb the pyramid and write another test**.
+
+## Gherkin
+
+At this point, all the business rules are tested and documented by the tests
+in the **Acceptance** layer. This is the closest level to the logic where they can 
+be described in business terms.
+
+Since the test layers above the service layer are mostly made up subsets of the
+layers below, it's nice to describe them in the same way. A neat way to do
+this, which is slowly becoming more popular in the BDD community, is to use the
+same Gherkin features at each level but have them test the application through
+different entry points. This can either be done by running them against a
+different set of *step definitions* or by injecting a different *driver* into
+the test suite. Tags can be used to set which tests are promoted up to the
+higher levels in the pyramid.
+
+An example feature for the application we've just created would look like this:
+
+```gherkin
+Feature: Paying wages
+  In order to pay our employees for the great work they do
+  As a book keeper
+  I need to be able to calcualte their wages
+
+  Background:
+    Given Kevin gets paid £10 per hour
+    And normal working hours are between 09:00 and 17:00
+
+  @e2e # <- promote this test to run at the E2E as well as the Service level
+  Scenario: Pay wages for the number of hours worked in a week
+    Given Kevin has worked for the following times:
+      | Day        | Start | End   |
+      | 2016-11-14 | 09:00 | 17:00 |
+      | 2016-11-15 | 09:00 | 13:00 |
+      | 2016-11-17 | 14:00 | 17:00 |
+    When I pay Kevin's wages for the week starting on 2016-11-14
+    Then Kevin should get £150 for the week starting on 2016-11-14
+
+  Scenario: Pay number of hours times one and a half for overtime
+    Given Kevin has worked for the following times:
+      | Day        | Start | End   |
+      | 2016-11-21 | 15:00 | 19:00 |
+    When I pay Kevin's wages for the week starting on 2016-11-21
+    Then Kevin should get £50 for the week starting on 2016-11-21
+```
 
 ## Conclusion
 
 From my current experience, these rules are a great guide to creating a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
-delivery.
+delivery. It doesn't matter what the layers of your test suite are, so long as
+the lower ones support the ones above. For example, if your application has a
+Javascript *Single Page Application* for the UI, which talks a REST API, then
+the pyramid might look like this:
+
+              /\
+          End-to-End
+            /Tests
+           /-----\
+          /API Tests
+         /over HTTP\
+        /-----------\
+       / UI & Domain \
+      /Acceptance Tests
+     /----------------\
+    /    UI & Domain   \
+   /_____Unit Tests_____\
 
 This article didn't cover everything which is necessary to achieve this - the
 identification of the different layers, classification of the tests, correct
