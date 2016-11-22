@@ -294,7 +294,7 @@ An example feature for the application we've just created would look like this:
 Feature: Paying wages
   In order to pay our employees for the great work they do
   As a book keeper
-  I need to be able to calcualate their wages
+  I need to be able to calculate their wages
 
   Background:
     Given Kevin gets paid £10 per hour
@@ -342,7 +342,7 @@ then the pyramid might look like this:
 
 This article doesn't cover everything which is necessary to achieve this - the
 identification of the different layers, classification of the tests, correct
-architecture and mocking approaches are all the things I haven't discuss in
+architecture and mocking approaches are all the things I haven't discussed in
 detail here as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
