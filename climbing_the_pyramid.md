@@ -13,7 +13,8 @@ With this knowledge, the problem which many people are struggling with at the
 moment is slow test suites - which in turn, makes the build pipelines slow,
 painful and expensive.
 
-Thankfully there are a some very clever people who are currently sharing information (at conferences and in books and articles) about building
+Thankfully there are a some very clever people who are currently sharing
+information (at conferences and in books and articles) about building
 architectures which allow this problem to be solved. This is done by favouring
 isolated, targeted tests at lowest levels; over slow, all encompassing
 end-to-end tests.
@@ -122,7 +123,7 @@ Scenario: Pay wages for the number of hours worked in a week
   Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
-This is too complicated to implement using a single unit test, but it can be
+This is too complicated to create a single unit test, but it can be
 done at both the E2E or the Service level. By applying the **first rule**,
 we choose the lowest level of the two and write some steps to test the Service
 layer. These look like this:
@@ -284,13 +285,14 @@ climb the pyramid and write another test**.
 
 ## Conclusion
 
-From my current experience, these rules are a great guide to create a test
+From my current experience, these rules are a great guide to creating a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
 delivery.
 
 This article didn't cover everything which is necessary to achieve this - the
-identification of the different layers, classification of the tests,
-correct architecture and mocking approaches are all the things I didn't discuss in detail here as I believe they have been covered in depth elsewhere.
+identification of the different layers, classification of the tests, correct
+architecture and mocking approaches are all the things I didn't discuss in
+detail here as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
 like to hear if they match your workflow or if you can think of situations
