@@ -148,10 +148,10 @@ public function test_paying_wages_for_a_week()
     $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-17'), Period::fromString('14:00', '17:00')));
    
     // When I calculate Kevin's wages for the week starting on 2016-11-14
-    $this->commandBus->run(PayWeeklyWages($this->kevin, '2016-11-14');
+    $this->commandBus->run(new PayWeeklyWages($this->kevin, '2016-11-14'));
 
     // Then Kevin should get £150 for the week starting on '2016-11-14'
-    $result = $this->queryRunner(CheckEmployeeWagesForAWeek('2016-11-14'));
+    $result = $this->queryRunner(new CheckEmployeeWagesForAWeek('2016-11-14'));
     assertEquals(150, $result->getAmount());
 }
 ```
@@ -256,10 +256,10 @@ public function test_paying_overtime_wages_for_a_week()
     $this->commandBus->run(new LogWork($this->kevin, Date::fromString('2016-11-21'), Period::fromString('15:00', '19:00')));
    
     // When I calculate Kevin's wages for the week starting on 2016-11-21
-    $this->commandBus->run(PayWeeklyWages($this->kevin, '2016-11-21');
+    $this->commandBus->run(new PayWeeklyWages($this->kevin, '2016-11-21'));
 
     // Then Kevin should get £50 for the week starting on '2016-11-21'
-    $result = $this->queryRunner(CheckEmployeeWagesForAWeek('2016-11-21'));
+    $result = $this->queryRunner(new CheckEmployeeWagesForAWeek('2016-11-21'));
     assertEquals(50, $result->getAmount());
 }
 ```
