@@ -3,8 +3,9 @@
 In this modern day of software development, we've learned that to deliver
 high-quality software, we must work in an Agile way. To do this, we need quick
 feedback so that we can adjust and learn as fast as possible. We
-technically optimise the feedback cycle time at the smallest level by using
-TDD, and at the largest level with Continuous Deployment.
+technically optimise the feedback cycle time at the micro level by using
+TDD, and at the macro level with Continuous Integration. (Adi's Note: Continuous
+Deployment is just a deployment detail)
 
 We also know that to release fast and often, we need a test suite which gives
 us complete confidence so that we don't release broken software.
@@ -53,11 +54,11 @@ the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
 
-    slow   general expensive     /\
-     |       |        |         /__\
-     |       |        |        /____\
-     |       |        |       /______\
-    fast  focused   cheap    /________\
+    slow   general   more expensive   /\
+     |       |          |            /__\
+     |       |          |           /____\
+     |       |          |          /______\
+    fast  focused    cheaper      /________\
                             |num. tests|
 
 _**You can only have confidence in a layer if you have complete confidence in all
@@ -76,10 +77,14 @@ I'm going to introduce the rules now. The rest of this article demonstrates
 how and why they work.
 
 1. **Always start implementing a new system behaviour by writing a test at the
-   lowest level where it can be described in a single test.**
+   lowest level where it can be described in a single test.** 
 
 2. **If a test is red, make it green by applying outside-in TDD down into the
-   lower levels.**
+   lower levels.**(Adi's Note 1: I don't understand how writing a test outside-
+   in could be made at lower levels. You typically start outside-in with a
+   guiding test, which is at the top level. Thus the name Outside-in.)
+   (Adi's Note 2: You can have outside-in and inside-out tests, depending on
+   the problem you are solving).
 
 3. **If and only if all tests are green AND the system behaviour is still not
    working, climb up to the next level of the pyramid and write a new failing
@@ -126,9 +131,10 @@ Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
 This is too complicated to create a single unit test for, but it can be
-described in a single test at both the **E2E** or the **Acceptance** level. By
-applying the **first rule**, we choose the lowest level of the two create a
-test which looks like this:
+described in a single test at both the **E2E** (Adi's Note: I would not use
+abreviation E2E, just write end-to-end, it's clearer for the reader) or the
+**Acceptance** level. By applying the **first rule**, we choose the lowest level of
+the two create a test which looks like this:
 
 ```php
 public function test_paying_wages_for_a_week()
@@ -217,6 +223,8 @@ public function test_paying_wages_for_a_week_via_the_UI()
     $this->assertPageHasText("Wages for week starting 2016-11-14: £150");
 }
 ```
+(Adi's Note: You have a lot of duplication in the test above. You could have a 
+function calling fillField three times and then pressButton)
 
 This test can now be used to drive the implementation of the user interface.
 
@@ -350,3 +358,5 @@ like to hear if they match your workflow or if you can think of situations
 where they don't apply. If you have any further thoughts or questions please
 contact me either by [email](mailto:tom@x2k.co.uk) or on
 [Twitter](https://twitter.com/tomphp).
+
+(Adi's Note: It's a kind of difficult to remember the rules while reading. You keep mentioning things like **rule one**. Better keep the numbering of rules, but give a name for each of the three rules. This increases the memorability of the three rules, and the article becomes easier to read).
