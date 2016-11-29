@@ -73,7 +73,7 @@ to present still apply.
 It's also important to point out that the tests are run from the bottom to the top
 of the pyramid. And each layer is only run if the layer below has passed successfully.
 
-## The Rules
+## The Rules of The Test Pyramid
 
 I'm going to introduce the rules now. The rest of this article demonstrates
 how and why they work.
@@ -98,7 +98,7 @@ talk](https://skillsmatter.com/skillscasts/8567-testable-software-architecture))
 have always led me to a fast and stable test suite which gives me the
 confidence I need to run and change my application.
 
-## The Example
+## A Working Example
 
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
@@ -224,7 +224,7 @@ This test can now be used to drive the implementation of the user interface.
 Once all the tests are green, we can manually check the behaviour of the system
 and confirm that the implementation is complete.
 
-### Second Behaviour
+### The Second Behaviour
 
 For the second behaviour, the system needs to pay the number of hours times one
 and a half for overtime. Let's define an example for that:
@@ -321,7 +321,7 @@ Feature: Paying wages
     Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
-## Conclusion
+## In Conclusion
 
 From my current experience, these rules are a great guide to creating a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
