@@ -1,38 +1,41 @@
 # Climbing the Test Pyramid
 
 In this modern day of software development, we've learned that to deliver
-high-quality software, we must work in an Agile way. To do this, we need quick
-feedback so that we can adjust and learn as fast as possible. We
-technically optimise the feedback cycle time at the smallest level by using
-TDD, and at the largest level with Continuous Deployment.
+high-quality software, we must work in an Agile way. To do this, we need rapid
+feedback so that we can learn and grow as quickly as possible. 
+
+We, technically, optimise the feedback cycle time at the smallest level by using
+TDD and at the largest level using [Continuous Deployment](https://puppet.com/blog/continuous-delivery-vs-continuous-deployment-what-s-diff).
 
 We also know that to release fast and often, we need a test suite which gives
 us complete confidence so that we don't release broken software.
 
 With this knowledge, the problem which many people are struggling with at the
-moment is slow test suites - which in turn, makes the build pipelines slow,
-painful and expensive.
+moment are slow test suites, which in turn make the build pipelines slow,
+painful, and expensive.
 
 Thankfully there are a some very clever people who are currently sharing
 information (at conferences and in books and articles) about building
-architectures which allow this problem to be solved. This is done by favouring
-isolated, targeted tests at lowest levels; over slow, all encompassing
-end-to-end tests.
+architectures which allow this problem to be solved. 
+
+This is done by favouring isolated, targeted tests at lowest levels; over slow, 
+all encompassing end-to-end tests.
 
 For a lot of people, this raises the concern about how to maintain the
 confidence that these lower level tests cover all the behaviour in the system,
 while not testing everything with end-to-end acceptance tests.
 
-For some years now, I've been developing software in this way, and I feel that
-I have now learned a workflow which gives me complete confidence in the test
-suite as well as fast build pipelines. This article presents the three simple
-rules of this workflow.
+For some years now, I've been developing software in this way, and feel that
+I have now mastered a workflow which gives me complete confidence in the test
+suite as well as fast build pipelines. 
+
+This article presents the three simple rules of this workflow.
 
 [Jump straight to the rules](#the-rules)
 
 ## Introducing the Test Pyramid
 
-The Test Pyramid was created quite some time ago by Mike Cohn. It looks like
+[The Test Pyramid](https://www.mountaingoatsoftware.com/blog/the-forgotten-layer-of-the-test-automation-pyramid) was created quite some time ago by Mike Cohn. It looks like
 this:
 
          /\
@@ -43,12 +46,12 @@ this:
     /___Unit___\
 
 Each layer describes a level of testing in the project. The bottom level
-contains the smallest, most targeted tests, which are the fastest to run. The
+contains the smallest, most targeted, tests, which are the fastest to run. The
 top level contains the tests which prove the system behaviour by testing the
 whole system - these tests can be very slow.
 
 To make the test suite fast, you want to create more tests in the lower levels,
-which give the confidence to have less in the higher levels - how to do this is
+which give the confidence to have less in the higher levels; how to do this is
 the focus of this article.
 
 It's worth noting some important properties of the test pyramid:
@@ -60,17 +63,17 @@ It's worth noting some important properties of the test pyramid:
     fast  focused   cheap    /________\
                             |num. tests|
 
-_**You can only have confidence in a layer if you have complete confidence in all
-the layers below.**_
+_**You can only have confidence in a given layer if you have complete confidence in all
+the layers below it.**_
 
 The names of the layers and the number of layers may vary depending on your
-system architecture, but the properties of the pyramid and the rules I'm about
+system architecture. But the properties of the pyramid and the rules I'm about
 to present still apply.
 
-It's also important to point out that the tests are run from the bottom of the
-pyramid up. Each layer is only run if the layer below has passed successfully.
+It's also important to point out that the tests are run from the bottom to the top
+of the pyramid. And each layer is only run if the layer below has passed successfully.
 
-## The Rules
+## The Rules of The Test Pyramid
 
 I'm going to introduce the rules now. The rest of this article demonstrates
 how and why they work.
@@ -78,10 +81,10 @@ how and why they work.
 1. **Always start implementing a new system behaviour by writing a test at the
    lowest level where it can be described in a single test.**
 
-2. **If a test is red, make it green by applying outside-in TDD down into the
+2. **If a test is red, make it green by applying [outside-in TDD](http://softwareengineering.stackexchange.com/questions/166409/tdd-outside-in-vs-inside-out) down into the
    lower levels.**
 
-3. **If and only if all tests are green AND the system behaviour is still not
+3. **If — and only if — all tests are green AND the system behaviour is still not
    working, climb up to the next level of the pyramid and write a new failing
    test.**
 
@@ -95,14 +98,14 @@ talk](https://skillsmatter.com/skillscasts/8567-testable-software-architecture))
 have always led me to a fast and stable test suite which gives me the
 confidence I need to run and change my application.
 
-## The Example
+## A Working Example
 
 For this example, we'll work through the process of creating a small system
 which calculates wages from hours worked.
 
 For this application:
 
-* the UI will be a HTML webpage and will only be tested by the **E2E** tests.
+* The UI will be a HTML webpage and will only be tested by the **E2E** tests.
 * The business logic will all be contained in the *domain model*. This logic
   will be clearly defined by the tests in the **Acceptance** layer.
 * The **Unit** layer will contain all the unit tests which are used to drive
@@ -125,9 +128,9 @@ When I pay Kevin's wages for the week starting on 2016-11-14
 Then Kevin should get £150 for the week starting on 2016-11-14
 ```
 
-This is too complicated to create a single unit test for, but it can be
+This is too complicated to create a single unit test for. But it can be
 described in a single test at both the **E2E** or the **Acceptance** level. By
-applying the **first rule**, we choose the lowest level of the two create a
+applying the **first rule**, we choose the lowest level of the two, and create a
 test which looks like this:
 
 ```php
@@ -157,15 +160,13 @@ public function test_paying_wages_for_a_week()
 ```
 
 This test is now red because there is no implementation yet. To implement it we
-can apply the **second rule** and use the TDD cycle to write unit tests and
-drive the development of domain model.
+can apply the **second rule** and use [the TDD cycle](http://blog.cleancoder.com/uncle-bob/2014/12/17/TheCyclesOfTDD.html) to write unit tests and drive the development of domain model.
 
 Once all the tests are green, we can consider **rule three**. Since there is no
 user interface at this point, we can consider system behaviour is incomplete.
-Therefore, we can drive the creation of the user interface by **climbing up the
-pyramid one level** to create an E2E test.
 
-This E2E test looks like this:
+Therefore, we can drive the creation of the user interface by **climbing up the
+pyramid one level** to create an E2E test. This E2E test looks like this:
 
 ```php
 public function test_paying_wages_for_a_week_via_the_UI()
@@ -223,7 +224,7 @@ This test can now be used to drive the implementation of the user interface.
 Once all the tests are green, we can manually check the behaviour of the system
 and confirm that the implementation is complete.
 
-### Second Behaviour
+### The Second Behaviour
 
 For the second behaviour, the system needs to pay the number of hours times one
 and a half for overtime. Let's define an example for that:
@@ -238,7 +239,7 @@ When I pay Kevin's wages for the week starting on 2016-11-21
 Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
-Again, we start by applying **rule one** - the lowest level at which this
+Again, we start by applying **rule one**. The lowest level at which this
 scenario can be implemented is the **Acceptance** level, so we create a test
 there:
 
@@ -270,7 +271,7 @@ required to do this.
 
 Once the test goes green, we can apply **rule three** by going to the user
 interface and checking if this behaviour works. If everything has gone well,
-then this behaviour should be working correctly and there is **no need to
+then this behaviour should be working correctly, and there is **no need to
 climb the pyramid and write another test**.
 
 ## Gherkin
@@ -280,13 +281,15 @@ in the **Acceptance** layer. This is the closest level to the logic where they c
 be described in business terms.
 
 Since the test layers above the acceptance layer are mostly made up subsets of
-the layers below, it's nice to describe them in the same way. A neat way to do
-this, which is slowly becoming more popular in the BDD community, is to use the
-same Gherkin features at each level but have them test the application through
-different entry points. This can either be done by running them against a
-different set of *step definitions* or by injecting a different *driver* into
-the test suite. Tags can be used to set which tests are promoted up to the
-higher levels in the pyramid.
+the layers below, it's nice to describe them in the same way. 
+
+A neat way to do this, which is slowly becoming more popular in the BDD community, 
+is to use the same Gherkin features at each level but have them test the application 
+through different entry points. 
+
+This can either be done by running them against a different set of *step definitions* 
+or by injecting a different *driver* into the test suite. Tags can be used to set 
+which tests are promoted up to the higher levels in the pyramid.
 
 An example feature for the application we've just created would look like this:
 
@@ -318,11 +321,13 @@ Feature: Paying wages
     Then Kevin should get £50 for the week starting on 2016-11-21
 ```
 
-## Conclusion
+## In Conclusion
 
 From my current experience, these rules are a great guide to creating a test
 suite which has a healthy shaped pyramid - giving high confidence and a fast
-delivery. It doesn't matter what the layers of your test suite are, so long as
+delivery. 
+
+It doesn't matter what the layers of your test suite are, so long as
 the lower ones support the ones above. For example, if your application has a
 Javascript *Single Page Application* for the UI, which talks to a REST API,
 then the pyramid might look like this:
@@ -340,13 +345,15 @@ then the pyramid might look like this:
       /    UI & Domain   \
      /_____Unit Tests_____\
 
-This article doesn't cover everything which is necessary to achieve this - the
+This article doesn't cover everything which is necessary to achieve this. The
 identification of the different layers, classification of the tests, correct
 architecture and mocking approaches are all the things I haven't discussed in
-detail here as I believe they have been covered in depth elsewhere.
+detail here, as I believe they have been covered in depth elsewhere.
 
 Since I've come up with these three rules through my experience, I'd really
 like to hear if they match your workflow or if you can think of situations
-where they don't apply. If you have any further thoughts or questions please
+where they don't apply. 
+
+If you have any further thoughts or questions please
 contact me either by [email](mailto:tom@x2k.co.uk) or on
 [Twitter](https://twitter.com/tomphp).
