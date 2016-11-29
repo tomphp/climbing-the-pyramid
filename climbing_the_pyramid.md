@@ -5,7 +5,7 @@ high-quality software, we must work in an Agile way. To do this, we need rapid
 feedback so that we can learn and grow as quickly as possible. 
 
 We, technically, optimise the feedback cycle time at the smallest level by using
-TDD and at the largest level using Continuous Deployment.
+TDD and at the largest level using [Continuous Deployment](https://puppet.com/blog/continuous-delivery-vs-continuous-deployment-what-s-diff).
 
 We also know that to release fast and often, we need a test suite which gives
 us complete confidence so that we don't release broken software.
